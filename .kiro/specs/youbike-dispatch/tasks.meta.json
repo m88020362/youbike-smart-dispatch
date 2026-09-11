@@ -1,0 +1,129 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1. Data loading + cleaning + 30-minute target 【P0】": [
+      {
+        "executionId": "b38323ce-f908-48e6-aa37-16d62129dfe8",
+        "chatSessionId": "sess_7efe88d0-2567-4a3e-a3cb-06105b800432",
+        "timestamp": 1789015738221
+      },
+      {
+        "executionId": "b38323ce-f908-48e6-aa37-16d62129dfe8",
+        "chatSessionId": "sess_7efe88d0-2567-4a3e-a3cb-06105b800432",
+        "timestamp": 1789015846312
+      }
+    ],
+    "2. Minimal feature engineering 【P0】": [
+      {
+        "executionId": "9459b606-2b3b-4f8e-8835-3f80d6cffe73",
+        "chatSessionId": "sess_45faea10-5e8d-4a91-a5ff-b036b37cb75c",
+        "timestamp": 1789015910872
+      },
+      {
+        "executionId": "9459b606-2b3b-4f8e-8835-3f80d6cffe73",
+        "chatSessionId": "sess_45faea10-5e8d-4a91-a5ff-b036b37cb75c",
+        "timestamp": 1789016088987
+      }
+    ],
+    "3. Baseline + XGBoost 【P0】": [
+      {
+        "executionId": "bba48c23-61f3-43a9-aa95-620b35030067",
+        "chatSessionId": "sess_b584fad5-bc03-4168-a3bc-1dd6b2245fa0",
+        "timestamp": 1789016360472
+      },
+      {
+        "executionId": "bba48c23-61f3-43a9-aa95-620b35030067",
+        "chatSessionId": "sess_b584fad5-bc03-4168-a3bc-1dd6b2245fa0",
+        "timestamp": 1789017385163
+      }
+    ],
+    "4. Prediction output 【P0】": [
+      {
+        "executionId": "16199544-b10a-4bdf-a363-971f8940fd31",
+        "chatSessionId": "sess_c1150010-c5ed-40cb-aab1-77c29fc5fcff",
+        "timestamp": 1789043250215
+      },
+      {
+        "executionId": "16199544-b10a-4bdf-a363-971f8940fd31",
+        "chatSessionId": "sess_c1150010-c5ed-40cb-aab1-77c29fc5fcff",
+        "timestamp": 1789043423581
+      },
+      {
+        "executionId": "cdbd557b-ca80-44cf-b708-9e6bb9b2b208",
+        "chatSessionId": "sess_c1150010-c5ed-40cb-aab1-77c29fc5fcff",
+        "timestamp": 1789043632023
+      },
+      {
+        "executionId": "cdbd557b-ca80-44cf-b708-9e6bb9b2b208",
+        "chatSessionId": "sess_c1150010-c5ed-40cb-aab1-77c29fc5fcff",
+        "timestamp": 1789043885376
+      }
+    ],
+    "5. Intervention heuristic + Friend Relay 2.0 【P0】": [
+      {
+        "executionId": "e8deee1f-74d7-48c7-bd43-601348bea1e1",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789043954759
+      },
+      {
+        "executionId": "e8deee1f-74d7-48c7-bd43-601348bea1e1",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789045123440
+      },
+      {
+        "executionId": "3dda9939-d28f-441e-b954-1ce22c8305d5",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789046046215
+      },
+      {
+        "executionId": "3dda9939-d28f-441e-b954-1ce22c8305d5",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789046471433
+      }
+    ],
+    "6. Streamlit end-to-end demo 【P0】": [
+      {
+        "executionId": "33c4808b-00f1-4270-8212-f007e0d32d09",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789046786333
+      },
+      {
+        "executionId": "33c4808b-00f1-4270-8212-f007e0d32d09",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789047258146
+      },
+      {
+        "executionId": "ffdfe4e1-dd32-4ca2-a49f-d6222fac47d9",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789048467089
+      },
+      {
+        "executionId": "ffdfe4e1-dd32-4ca2-a49f-d6222fac47d9",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789049250723
+      },
+      {
+        "executionId": "aa637193-0565-4759-8231-da1f07647437",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789051651925
+      },
+      {
+        "executionId": "aa637193-0565-4759-8231-da1f07647437",
+        "chatSessionId": "sess_40578974-5853-4585-be99-00510ec089b5",
+        "timestamp": 1789051891402
+      }
+    ],
+    "7. 關鍵邏輯自動化測試補強 【P1】": [
+      {
+        "executionId": "65b0e137-d50b-4a48-bf43-808054e4f7d6",
+        "chatSessionId": "sess_50a6ab64-26ca-4aac-8280-1b32dbfaa881",
+        "timestamp": 1789052885332
+      },
+      {
+        "executionId": "65b0e137-d50b-4a48-bf43-808054e4f7d6",
+        "chatSessionId": "sess_50a6ab64-26ca-4aac-8280-1b32dbfaa881",
+        "timestamp": 1789054778634
+      }
+    ]
+  }
+}
