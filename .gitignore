@@ -5,3 +5,8 @@ __pycache__/
 outputs/
 dataset/
 download/
+
+# Build outputs and one-off verification artifacts (reproducible; not source)
+deploy/artifacts/
+deploy/test-xgb305/
+*.log

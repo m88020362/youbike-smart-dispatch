@@ -149,3 +149,35 @@ RISK_HIGH_MIN = 0.6
 MAX_NEIGHBOR_KM = 1.0
 REWARD_TIERS = [5, 10, 15]
 INTERVENTION_URGENT_PROB = 0.85  # max(shortage_prob, full_prob) >= this => urgency "high"
+
+# --- Prediction backend (Task 8 / v0 cloud demo) ---------------------------
+# Which predictor produces shortage_prob / full_prob.
+#   "local"     -> load models from MODELS_DIR and predict in-process (default,
+#                  the stable v0 behaviour; works with no AWS access at all).
+#   "sagemaker" -> call the deployed real-time endpoints via sagemaker-runtime.
+# Feature engineering, risk thresholds, intervention rules and the Streamlit UI
+# are IDENTICAL for both backends; only the probability source changes.
+BACKEND_LOCAL = "local"
+BACKEND_SAGEMAKER = "sagemaker"
+PREDICTION_BACKEND = BACKEND_LOCAL
+
+# Deployed SageMaker real-time endpoint names (created by deploy/create_models.py
+# + deploy/deploy_endpoints.py). Only used when PREDICTION_BACKEND == "sagemaker".
+AWS_REGION = "us-west-2"
+SAGEMAKER_ENDPOINT_SHORTAGE = "youbike-shortage-v1-endpoint"
+SAGEMAKER_ENDPOINT_FULL = "youbike-full-v1-endpoint"
+
+# --- Optional Bedrock explain layer (Task C) -------------------------------
+# Bedrock is a PURELY OPTIONAL natural-language wrapper around an ALREADY
+# FINISHED deterministic decision. It never predicts, classifies risk, ranks
+# donor stations, or chooses an action, and it is never called automatically.
+BEDROCK_ENABLED = False           # master off-switch; UI button also required
+BEDROCK_REGION = "us-west-2"
+# NOTE: confirm this model id is enabled in the workshop account before relying
+# on it. Any failure (AccessDenied / throttle / timeout / wrong id) falls back
+# to the deterministic template, so a wrong value cannot break the demo.
+BEDROCK_MODEL_ID = "anthropic.claude-3-5-sonnet-20240620-v1:0"
+BEDROCK_MAX_TOKENS = 300
+BEDROCK_TIMEOUT_SECONDS = 8
+# Competition constraint: strictly fewer than 1 request per second.
+BEDROCK_MIN_INTERVAL_SECONDS = 1.1

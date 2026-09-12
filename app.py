@@ -34,7 +34,15 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from src import config, data_loader, features, intervention, predict
+from src import (
+    config,
+    data_loader,
+    features,
+    intervention,
+    predict,
+    sagemaker_predict,
+)
+from src import explain as explain_layer
 
 # The observation-timestamp label format shown in the selector.
 _TS_FMT = "%Y-%m-%d %H:%M"
@@ -47,6 +55,21 @@ INTENT_RETURN_LABEL = "還車"
 # the normal demo stays clean; the underlying data (view["_prediction_raw"] /
 # ["_recommendation_raw"]) is still built and available for debugging.
 SHOW_DEV_VIEW = False
+
+# Developer-facing labels for the prediction backend selector. The backend only
+# changes WHERE shortage_prob / full_prob come from; all downstream risk levels,
+# intervention rules, Friend Relay missions and UI behaviour are unchanged.
+BACKEND_LABEL_LOCAL = "本機模型"
+BACKEND_LABEL_SAGEMAKER = "AWS SageMaker"
+BACKEND_LABELS = {
+    config.BACKEND_LOCAL: BACKEND_LABEL_LOCAL,
+    config.BACKEND_SAGEMAKER: BACKEND_LABEL_SAGEMAKER,
+}
+
+
+def backend_label(backend: str) -> str:
+    """Human-readable label for a prediction backend code."""
+    return BACKEND_LABELS.get(str(backend), str(backend))
 
 # Natural-language risk-level labels for the risk badge.
 _RISK_ZH = {
@@ -101,6 +124,8 @@ def build_snapshot(
     bundle: features.FeatureBundle,
     observation_ts: pd.Timestamp,
     artifacts: Dict,
+    backend: str = config.BACKEND_LOCAL,
+    sm_client=None,
 ) -> List[Dict]:
     """Predict a whole-network §9 snapshot for one observation timestamp.
 
@@ -114,6 +139,12 @@ def build_snapshot(
         bundle: FeatureBundle from build_feature_bundle().
         observation_ts: The demo "now" moment to snapshot.
         artifacts: Pre-loaded predict.load_artifacts() dict (models + meta).
+        backend: config.BACKEND_LOCAL (in-process models, default) or
+            config.BACKEND_SAGEMAKER (call the deployed real-time endpoints).
+            Only the probability SOURCE changes; the resulting §9 dicts are
+            identical in shape and semantics either way.
+        sm_client: Optional sagemaker-runtime client reused across stations when
+            backend is SageMaker. Created once on demand when None.
 
     Returns:
         A list of §9 prediction dicts (one per station that has data at/before
@@ -133,24 +164,47 @@ def build_snapshot(
         .tail(1)
     )
 
-    snapshot: List[Dict] = []
+    use_sagemaker = backend == config.BACKEND_SAGEMAKER
+
+    # Collect the aligned per-station inputs once; both backends consume these.
+    row_indices: List[int] = []
+    metas: List[Dict] = []
+    timestamps: List[pd.Timestamp] = []
     for _, row in latest.iterrows():
-        feature_row = bundle.X.iloc[int(row["_row"])]
-        meta = {
-            "station": row["_station_name"],
-            "lat": float(row[config.COL_LAT]),
-            "lon": float(row[config.COL_LON]),
-            "current_bikes": int(row[config.COL_AVAILABLE_BIKES]),
-            "current_docks": int(row[config.COL_AVAILABLE_DOCKS]),
-            "total_docks": int(row[config.COL_TOTAL_DOCKS]),
-        }
-        pred = predict.predict_station(
-            feature_row,
-            meta,
-            row[config.COL_TIMESTAMP],
-            artifacts=artifacts,
+        row_indices.append(int(row["_row"]))
+        metas.append(
+            {
+                "station": row["_station_name"],
+                "lat": float(row[config.COL_LAT]),
+                "lon": float(row[config.COL_LON]),
+                "current_bikes": int(row[config.COL_AVAILABLE_BIKES]),
+                "current_docks": int(row[config.COL_AVAILABLE_DOCKS]),
+                "total_docks": int(row[config.COL_TOTAL_DOCKS]),
+            }
         )
-        snapshot.append(pred)
+        timestamps.append(row[config.COL_TIMESTAMP])
+
+    if use_sagemaker:
+        # BATCH: exactly two invoke_endpoint calls for the whole snapshot
+        # (one shortage, one full) instead of 2 per station.
+        if sm_client is None:
+            sm_client = sagemaker_predict.get_runtime_client()
+        feature_frame = bundle.X.iloc[row_indices].reset_index(drop=True)
+        snapshot = sagemaker_predict.build_snapshot_batch(
+            feature_frame,
+            metas,
+            timestamps,
+            feature_meta=artifacts["feature_meta"],
+            client=sm_client,
+        )
+    else:
+        # LOCAL: unchanged stable path, one in-process prediction per station.
+        snapshot = [
+            predict.predict_station(
+                bundle.X.iloc[idx], meta, ts, artifacts=artifacts
+            )
+            for idx, meta, ts in zip(row_indices, metas, timestamps)
+        ]
 
     snapshot.sort(key=lambda p: str(p["station"]))
     return snapshot
@@ -570,9 +624,13 @@ def _render_operator_mode(
     snapshot: List[Dict],
     station_names: List[str],
     ts_choice: pd.Timestamp,
+    backend: str = config.BACKEND_LOCAL,
 ) -> None:
     """營運中心 — predictive risk + Truck Rebalancing (no user relay controls)."""
-    st.caption(f"觀測時間：{pd.Timestamp(ts_choice).strftime(_TS_FMT)}")
+    st.caption(
+        f"觀測時間：{pd.Timestamp(ts_choice).strftime(_TS_FMT)}"
+        f"　·　預測來源：{backend_label(backend)}"
+    )
 
     preset = st.session_state.get("preset_station")
     idx = station_names.index(preset) if preset in station_names else 0
@@ -618,8 +676,36 @@ def _render_operator_mode(
         st.write(f"輔助措施：{secondary_label}")
     st.write(f"原因：{decision['reason']}")
 
+    # ---- Optional AI 說明 (explain layer) ------------------------------- #
+    # Button-triggered ONLY. The deterministic decision above is already
+    # complete; this merely rephrases it. Result is cached in session_state so a
+    # Streamlit rerun never issues another request.
+    explain_key = f"_explain::{station}"
+    if st.button("AI 說明", key=f"explain_btn_{station}"):
+        text, source, fallback_reason = explain_layer.explain_decision(
+            decision, use_bedrock=config.BEDROCK_ENABLED
+        )
+        st.session_state[explain_key] = {
+            "text": text,
+            "source": source,
+            "fallback_reason": fallback_reason,
+        }
+
+    cached = st.session_state.get(explain_key)
+    if cached is not None:
+        st.info(cached["text"])
+        label = (
+            "Amazon Bedrock"
+            if cached["source"] == explain_layer.SOURCE_BEDROCK
+            else "內建說明模板（未呼叫 Bedrock）"
+        )
+        st.caption(f"說明來源：{label}")
+        if cached["fallback_reason"]:
+            st.caption(cached["fallback_reason"])
+
     if SHOW_DEV_VIEW:
         with st.expander("開發者檢視（原始預測 / 建議資料 §9）"):
+            st.write(f"Prediction backend: {backend_label(backend)}")
             st.json(
                 {
                     "prediction": view["_prediction_raw"],
@@ -665,13 +751,45 @@ def main() -> None:
     timestamps = available_timestamps(bundle)
 
     @st.cache_data(show_spinner="建立整網預測快照 ...")
-    def _snapshot_cached(ts_iso: str) -> List[Dict]:
-        return build_snapshot(bundle, pd.Timestamp(ts_iso), artifacts)
+    def _snapshot_cached(ts_iso: str, backend: str) -> List[Dict]:
+        return build_snapshot(
+            bundle, pd.Timestamp(ts_iso), artifacts, backend=backend
+        )
 
     @st.cache_data(show_spinner="尋找示範情境 ...")
     def _demo_scenario():
         scenario = find_demo_scenario(bundle, artifacts, timestamps)
         return None if scenario is None else (scenario[0].isoformat(), scenario[1])
+
+    # ---- Sidebar: developer prediction-backend switch -------------------- #
+    # Default stays 本機模型 so the stable v0 demo is never broken by AWS state.
+    st.sidebar.header("開發者選項")
+    backend_choice_label = st.sidebar.radio(
+        "預測來源",
+        options=[BACKEND_LABEL_LOCAL, BACKEND_LABEL_SAGEMAKER],
+        index=0,
+        key="prediction_backend",
+        help="本機模型直接載入 models/ 推論；AWS SageMaker 呼叫已部署的 endpoint。"
+             "兩者的特徵、風險門檻與介入規則完全相同。",
+    )
+    backend = (
+        config.BACKEND_SAGEMAKER
+        if backend_choice_label == BACKEND_LABEL_SAGEMAKER
+        else config.BACKEND_LOCAL
+    )
+
+    # Probe the endpoints before using them, and fall back rather than crash.
+    if backend == config.BACKEND_SAGEMAKER:
+        ok, message = sagemaker_predict.check_endpoints()
+        if ok:
+            st.sidebar.success("SageMaker Endpoint 就緒")
+        else:
+            st.sidebar.warning(
+                f"無法使用 SageMaker，已自動切回本機模型。\n\n{message}"
+            )
+            backend = config.BACKEND_LOCAL
+
+    st.sidebar.caption(f"目前預測來源：{backend_label(backend)}")
 
     # ---- Sidebar: observation time + high-risk demo scenario ------------- #
     st.sidebar.header("示範控制")
@@ -701,7 +819,18 @@ def main() -> None:
         format_func=lambda t: pd.Timestamp(t).strftime(_TS_FMT),
     )
 
-    snapshot = _snapshot_cached(pd.Timestamp(ts_choice).isoformat())
+    try:
+        snapshot = _snapshot_cached(pd.Timestamp(ts_choice).isoformat(), backend)
+    except sagemaker_predict.EndpointUnavailableError as exc:
+        # An endpoint died mid-session: warn, fall back to local, keep running.
+        st.warning(
+            f"SageMaker 推論失敗，已改用本機模型繼續示範。\n\n詳細：{exc}"
+        )
+        backend = config.BACKEND_LOCAL
+        snapshot = _snapshot_cached(
+            pd.Timestamp(ts_choice).isoformat(), backend
+        )
+
     if not snapshot:
         st.warning("此時間點沒有可用的站點資料，請選擇另一個時間。")
         st.stop()
@@ -716,7 +845,9 @@ def main() -> None:
         _render_user_mode(st, snapshot, station_names)
 
     with operator_tab:
-        _render_operator_mode(st, snapshot, station_names, pd.Timestamp(ts_choice))
+        _render_operator_mode(
+            st, snapshot, station_names, pd.Timestamp(ts_choice), backend
+        )
 
 
 if __name__ == "__main__":
