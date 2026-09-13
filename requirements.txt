@@ -1,8 +1,16 @@
-# Runtime dependencies for the YouBike predictive dispatch MVP.
+﻿# Runtime dependencies for the YouBike predictive dispatch system.
 # Versions pinned to those present in the project's .venv (pip freeze).
+
+# --- core / V0 local inference (XGBoost) ---
 streamlit==1.63.0
 pandas==3.0.5
 numpy==2.5.3
 scikit-learn==1.9.0
 xgboost==3.4.1
 matplotlib==3.11.1
+
+# --- V1 AWS SageMaker path ---
+# boto3  : calls the SageMaker real-time endpoint (sagemaker-runtime)
+# pyarrow: reads the small demo snapshot / station-feature parquet files
+boto3==1.43.93
+pyarrow==25.0.1
