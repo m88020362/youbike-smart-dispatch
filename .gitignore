@@ -10,3 +10,34 @@ download/
 deploy/artifacts/
 deploy/test-xgb305/
 *.log
+
+# ---------------------------------------------------------------------------
+# V1 training (branch stable-v1-training): share SOURCE only.
+# Everything below is large, regenerable, machine-local, or runtime state.
+# The files stay on disk; Git just ignores them.
+# ---------------------------------------------------------------------------
+v1_training/venv/
+v1_training/_enriched_raw/
+v1_training/_enriched_channels/
+v1_training/_channels/
+v1_training/_enriched_sourcedir.tar.gz
+v1_training/_sourcedir.tar.gz
+v1_training/local_fallback/
+v1_training/enriched/
+v1_training/**/__pycache__/
+
+# bulk data / binaries / logs anywhere under v1_training
+v1_training/**/*.csv
+v1_training/**/*.parquet
+v1_training/**/*.log
+v1_training/**/*.pkl
+v1_training/**/*.tar.gz
+v1_training/**/*.txt
+
+# EXCEPTION: the container dependency pin is real source and must be shared.
+!v1_training/sourcedir/requirements.txt
+
+# Runtime status: committing these would make a fresh clone look like a job
+# is still live. Regenerated on every run.
+v1_training/enriched_status.json
+v1_training/overnight_status.json
