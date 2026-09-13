@@ -1,0 +1,78 @@
+{
+  "status": "InService",
+  "artifact_uri": "s3://youbike-dispatch-502837994229-usw2/v1-deploy/youbike-v1-multimodel.tar.gz",
+  "model": "youbike-v1-multimodel",
+  "config": "youbike-v1-multimodel-config",
+  "endpoint": "youbike-v1-multimodel-endpoint",
+  "image": "246618743249.dkr.ecr.us-west-2.amazonaws.com/sagemaker-scikit-learn:1.2-1",
+  "instance": "ml.m5.large",
+  "parity": [
+    {
+      "model": "weekday_30m_bike_ratio",
+      "route": "weekday/30",
+      "rows": 500,
+      "n_features": 14,
+      "local_first": 0.07977662001090094,
+      "aws_first": 0.07977662001090094,
+      "max_abs_diff": 0.0,
+      "routed_correctly": true,
+      "pass": true,
+      "alert_thresholds": {
+        "low_bike_alert_below": 0.21,
+        "high_occupancy_alert_above": 0.62
+      }
+    },
+    {
+      "model": "weekday_60m_bike_ratio",
+      "route": "weekday/60",
+      "rows": 500,
+      "n_features": 14,
+      "local_first": 0.09959578538905735,
+      "aws_first": 0.09959578538905735,
+      "max_abs_diff": 0.0,
+      "routed_correctly": true,
+      "pass": true,
+      "alert_thresholds": {
+        "low_bike_alert_below": 0.25,
+        "high_occupancy_alert_above": 0.65
+      }
+    },
+    {
+      "model": "weekend_30m_bike_ratio",
+      "route": "weekend/30",
+      "rows": 500,
+      "n_features": 13,
+      "local_first": 0.09009473819271001,
+      "aws_first": 0.09009473819271001,
+      "max_abs_diff": 0.0,
+      "routed_correctly": true,
+      "pass": true,
+      "alert_thresholds": {
+        "low_bike_alert_below": 0.22,
+        "high_occupancy_alert_above": 0.65
+      }
+    },
+    {
+      "model": "weekend_60m_bike_ratio",
+      "route": "weekend/60",
+      "rows": 500,
+      "n_features": 13,
+      "local_first": 0.6357759248837753,
+      "aws_first": 0.6357759248837753,
+      "max_abs_diff": 0.0,
+      "routed_correctly": true,
+      "pass": true,
+      "alert_thresholds": {
+        "low_bike_alert_below": 0.25,
+        "high_occupancy_alert_above": 0.55
+      }
+    }
+  ],
+  "guards": {
+    "weekend_rows_to_weekday_route": "rejected: ModelError",
+    "invalid_day_type": "rejected: ModelError",
+    "invalid_horizon": "rejected: ModelError"
+  },
+  "parity_all_pass": true,
+  "tolerance": 1e-09
+}

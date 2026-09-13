@@ -41,3 +41,18 @@ v1_training/**/*.txt
 # is still live. Regenerated on every run.
 v1_training/enriched_status.json
 v1_training/overnight_status.json
+
+# ---------------------------------------------------------------------------
+# V1 delivery: allow ONLY the small runtime artifacts the demo needs to boot.
+# Teammates can clone and run the demo without touching the 1.1 GB enriched CSV.
+# Every other parquet under v1_training/ stays excluded by the rules above.
+# ---------------------------------------------------------------------------
+!v1_training/runtime/
+!v1_training/runtime/station_features.parquet
+!v1_training/runtime/demo_weekday_snapshot.parquet
+!v1_training/runtime/demo_weekend_snapshot.parquet
+!v1_training/runtime/station_features.csv
+
+# Model bundle is rebuildable from deploy_v1/build_bundle.py and already lives
+# in S3 (see README). Keep the 3.2 MB binary out of Git.
+deploy_v1/artifacts/

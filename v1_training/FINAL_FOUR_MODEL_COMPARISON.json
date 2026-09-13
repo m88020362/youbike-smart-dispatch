@@ -1,0 +1,290 @@
+{
+  "rows": {
+    "weekday_30m_bike_ratio": {
+      "job": "weekday-30m-bike-ratio-enr-1789263106",
+      "status": "Completed",
+      "train": 863994,
+      "valid": 216855,
+      "nfeat": 14,
+      "features": [
+        "current_available_bikes",
+        "current_available_docks",
+        "total_docks",
+        "current_bike_ratio",
+        "hour",
+        "weekday",
+        "lon",
+        "lat",
+        "nearest_junior_high_distance",
+        "nearest_university_distance",
+        "nearest_mrt_distance",
+        "nearest_bus_distance",
+        "is_peak",
+        "rainfall"
+      ],
+      "MAE": 0.07540173731110925,
+      "RMSE": 0.11575216238952823,
+      "R2": 0.7664355529573589,
+      "lp": 0.8468636201845412,
+      "lr": 0.8231536926147704,
+      "lf": 0.8348403465680584,
+      "lauc": 0.9396084076158048,
+      "hp": 0.7261963492846571,
+      "hr": 0.21037587537516078,
+      "hf": 0.326241134751773,
+      "hauc": 0.9303737715413309,
+      "lowalert": 0.21,
+      "lowalert_r": 0.8440585495675316,
+      "highalert": 0.62,
+      "highalert_r": 0.7524653422895526,
+      "dur": null,
+      "artifact": "s3://youbike-dispatch-502837994229-usw2/v1-enriched/output/weekday-30m-bike-ratio-enr-1789263106/output/model.tar.gz",
+      "start": "2026-05-04",
+      "end": "2026-05-29"
+    },
+    "weekday_60m_bike_ratio": {
+      "job": "weekday-60m-bike-ratio-enr-1789266895",
+      "status": "Completed",
+      "train": 839308,
+      "valid": 210659,
+      "nfeat": 14,
+      "features": [
+        "current_available_bikes",
+        "current_available_docks",
+        "total_docks",
+        "current_bike_ratio",
+        "hour",
+        "weekday",
+        "lon",
+        "lat",
+        "nearest_junior_high_distance",
+        "nearest_university_distance",
+        "nearest_mrt_distance",
+        "nearest_bus_distance",
+        "is_peak",
+        "rainfall"
+      ],
+      "MAE": 0.10236814106498505,
+      "RMSE": 0.14499349231672307,
+      "R2": 0.6344120020089989,
+      "lp": 0.8153896909807864,
+      "lr": 0.7034697750067769,
+      "lf": 0.755306221940873,
+      "lauc": 0.9011931953062183,
+      "hp": 0.6839186691312384,
+      "hr": 0.05440376415233054,
+      "hf": 0.10078997548351946,
+      "hauc": 0.8811895267968002,
+      "lowalert": 0.25,
+      "lowalert_r": 0.8158037408511791,
+      "highalert": 0.65,
+      "highalert_r": 0.4168504631671813,
+      "dur": 138.637,
+      "artifact": "s3://youbike-dispatch-502837994229-usw2/v1-enriched/output/weekday-60m-bike-ratio-enr-1789266895/output/model.tar.gz",
+      "start": "2026-05-04",
+      "end": "2026-05-29"
+    },
+    "weekend_30m_bike_ratio": {
+      "job": "weekend-30m-bike-ratio-enr-1789266896",
+      "status": "Completed",
+      "train": 474887,
+      "valid": 119273,
+      "nfeat": 13,
+      "features": [
+        "current_available_bikes",
+        "current_available_docks",
+        "total_docks",
+        "current_bike_ratio",
+        "hour",
+        "weekday",
+        "lon",
+        "lat",
+        "nearest_junior_high_distance",
+        "nearest_university_distance",
+        "nearest_mrt_distance",
+        "nearest_bus_distance",
+        "rainfall"
+      ],
+      "MAE": 0.07759328889801391,
+      "RMSE": 0.11517324546039669,
+      "R2": 0.7662583247646336,
+      "lp": 0.8227730310464427,
+      "lr": 0.7952792390089672,
+      "lf": 0.808792549063089,
+      "lauc": 0.9379817468421199,
+      "hp": 0.7375537799631223,
+      "hr": 0.25734505683036674,
+      "hf": 0.38155802861685223,
+      "hauc": 0.9392687436884437,
+      "lowalert": 0.22,
+      "lowalert_r": 0.8409877619995094,
+      "highalert": 0.65,
+      "highalert_r": 0.7799699764100364,
+      "dur": 128.59,
+      "artifact": "s3://youbike-dispatch-502837994229-usw2/v1-enriched/output/weekend-30m-bike-ratio-enr-1789266896/output/model.tar.gz",
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    },
+    "weekend_60m_bike_ratio": {
+      "job": "weekend-60m-bike-ratio-enr-1789267182",
+      "status": "Completed",
+      "train": 461009,
+      "valid": 116175,
+      "nfeat": 13,
+      "features": [
+        "current_available_bikes",
+        "current_available_docks",
+        "total_docks",
+        "current_bike_ratio",
+        "hour",
+        "weekday",
+        "lon",
+        "lat",
+        "nearest_junior_high_distance",
+        "nearest_university_distance",
+        "nearest_mrt_distance",
+        "nearest_bus_distance",
+        "rainfall"
+      ],
+      "MAE": 0.10551492011932476,
+      "RMSE": 0.14603864162867694,
+      "R2": 0.6241852077548284,
+      "lp": 0.7875029331903054,
+      "lr": 0.6529182879377432,
+      "lf": 0.7139232043275441,
+      "lauc": 0.8955843824396764,
+      "hp": 0.7472324723247232,
+      "hr": 0.08934480476505625,
+      "hf": 0.15960591133004925,
+      "hauc": 0.8920664757369698,
+      "lowalert": 0.25,
+      "lowalert_r": 0.793663146192329,
+      "highalert": 0.55,
+      "highalert_r": 0.7522611956761527,
+      "dur": 123.589,
+      "artifact": "s3://youbike-dispatch-502837994229-usw2/v1-enriched/output/weekend-60m-bike-ratio-enr-1789267182/output/model.tar.gz",
+      "start": "2026-05-01",
+      "end": "2026-05-31"
+    }
+  },
+  "macro_low": {
+    "0.15": {
+      "mP": 0.8929019037446798,
+      "mR": 0.5562767624748055,
+      "mF1": 0.682236519369785,
+      "minR": 0.43902167871039466
+    },
+    "0.18": {
+      "mP": 0.8517160064808299,
+      "mR": 0.6766064235551368,
+      "mF1": 0.7525797541684226,
+      "minR": 0.5743746525847693
+    },
+    "0.2": {
+      "mP": 0.818132318850519,
+      "mR": 0.7437052486420644,
+      "mF1": 0.778215580474891,
+      "minR": 0.6529182879377432
+    },
+    "0.21": {
+      "mP": 0.8002194329091123,
+      "mR": 0.7700557318222663,
+      "mF1": 0.7841328857729717,
+      "minR": 0.6856031128404669
+    },
+    "0.22": {
+      "mP": 0.7825355086373808,
+      "mR": 0.7936663772173866,
+      "mF1": 0.7875367187381249,
+      "minR": 0.7168148971650917
+    },
+    "0.25": {
+      "mP": 0.7267405227817486,
+      "mR": 0.849697236850697,
+      "mF1": 0.783166567169691,
+      "minR": 0.793663146192329
+    },
+    "0.3": {
+      "mP": 0.6339632331328855,
+      "mR": 0.9092074628225432,
+      "mF1": 0.7468667942201226,
+      "minR": 0.8770150083379655
+    }
+  },
+  "macro_high": {
+    "0.55": {
+      "mP": 0.17163371308953404,
+      "mR": 0.796294354571373,
+      "mF1": 0.2819570599768664,
+      "minR": 0.6676959270695486
+    },
+    "0.6": {
+      "mP": 0.22525436767500012,
+      "mR": 0.7090013265897976,
+      "mF1": 0.34032613312303484,
+      "minR": 0.5456550507278342
+    },
+    "0.62": {
+      "mP": 0.2522708779953219,
+      "mR": 0.6658110113004436,
+      "mF1": 0.36331585446295,
+      "minR": 0.4912512865755036
+    },
+    "0.65": {
+      "mP": 0.30398005697072294,
+      "mR": 0.5958520277801678,
+      "mF1": 0.39748437763406996,
+      "minR": 0.4168504631671813
+    },
+    "0.7": {
+      "mP": 0.4166734205671936,
+      "mR": 0.45527356582576745,
+      "mF1": 0.42285232467112965,
+      "minR": 0.2865755036024114
+    },
+    "0.75": {
+      "mP": 0.5698467631886643,
+      "mR": 0.30120075365018073,
+      "mF1": 0.37681499036314003,
+      "minR": 0.15306572562858403
+    },
+    "0.8": {
+      "mP": 0.7237253176759353,
+      "mR": 0.15286737528072858,
+      "mF1": 0.24204876254554847,
+      "minR": 0.05440376415233054
+    }
+  },
+  "common_low": {
+    "alert": 0.22,
+    "mP": 0.7825355086373808,
+    "mR": 0.7936663772173866,
+    "mF1": 0.7875367187381249,
+    "minR": 0.7168148971650917,
+    "recall_target_met": true
+  },
+  "common_high": {
+    "alert": 0.55,
+    "mP": 0.17163371308953404,
+    "mR": 0.796294354571373,
+    "mF1": 0.2819570599768664,
+    "minR": 0.6676959270695486,
+    "recall_target_met": true
+  },
+  "persistent": {
+    "weekday": {
+      "n": 210659,
+      "low_persist": 42852,
+      "low_trans": 34408,
+      "high_persist": 12655,
+      "high_trans": 22995
+    },
+    "weekend": {
+      "n": 116175,
+      "low_persist": 24335,
+      "low_trans": 14026,
+      "high_persist": 11960,
+      "high_trans": 10128
+    }
+  }
+}

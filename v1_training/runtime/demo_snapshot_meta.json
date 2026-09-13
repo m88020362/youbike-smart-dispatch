@@ -1,0 +1,61 @@
+{
+  "weekday": {
+    "day_type": "weekday",
+    "timestamp": "2026-05-28 07:30:36",
+    "stations": 1159,
+    "file": "demo_weekday_snapshot.parquet",
+    "has_is_peak": true,
+    "rainfall_mean": 0.0,
+    "columns": [
+      "timestamp",
+      "city",
+      "district",
+      "station",
+      "total_docks",
+      "available_bikes",
+      "available_docks",
+      "lon",
+      "lat",
+      "nearest_junior_high_distance",
+      "nearest_university_distance",
+      "nearest_mrt_distance",
+      "nearest_bus_distance",
+      "rainfall",
+      "is_peak",
+      "current_available_bikes",
+      "current_available_docks",
+      "current_bike_ratio",
+      "hour",
+      "weekday"
+    ]
+  },
+  "weekend": {
+    "day_type": "weekend",
+    "timestamp": "2026-05-31 19:30:32",
+    "stations": 1159,
+    "file": "demo_weekend_snapshot.parquet",
+    "has_is_peak": false,
+    "rainfall_mean": 0.0,
+    "columns": [
+      "timestamp",
+      "city",
+      "district",
+      "station",
+      "total_docks",
+      "available_bikes",
+      "available_docks",
+      "lon",
+      "lat",
+      "nearest_junior_high_distance",
+      "nearest_university_distance",
+      "nearest_mrt_distance",
+      "nearest_bus_distance",
+      "rainfall",
+      "current_available_bikes",
+      "current_available_docks",
+      "current_bike_ratio",
+      "hour",
+      "weekday"
+    ]
+  }
+}

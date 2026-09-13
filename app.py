@@ -714,8 +714,8 @@ def _render_operator_mode(
             )
 
 
-def main() -> None:
-    """Streamlit entry point. Imported lazily; safe to call only under `streamlit run`."""
+def main_v0() -> None:
+    """STABLE V0 Streamlit UI (XGBoost shortage/full). Kept intact as fallback."""
     import streamlit as st
 
     st.set_page_config(page_title="YouBike 預測式調度 Demo", page_icon="🚲", layout="wide")
@@ -848,6 +848,37 @@ def main() -> None:
         _render_operator_mode(
             st, snapshot, station_names, pd.Timestamp(ts_choice), backend
         )
+
+
+def main() -> None:
+    """Entry point: V1 (AWS SageMaker multimodel) with explicit V0 fallback.
+
+    The V1 UI is the demo path. If the V1 endpoint is unavailable the user is
+    told explicitly and the stable V0 UI is rendered instead -- never a silent
+    fallback and never a crash.
+    """
+    import streamlit as st
+
+    st.set_page_config(page_title="YouBike 預測式供需調度系統",
+                       page_icon="🚲", layout="wide")
+
+    from src import v1_app, v1_predict
+
+    try:
+        v1_app.render(st)
+        return
+    except v1_predict.V1EndpointError as exc:
+        st.warning(
+            "V1 SageMaker Endpoint unavailable，已切換至 Stable V0。\n\n"
+            f"詳細：{exc}")
+    except FileNotFoundError as exc:
+        st.warning(
+            "V1 Demo 情境資料尚未建立，已切換至 Stable V0。\n\n"
+            f"詳細：{exc}")
+
+    # ---- explicit fallback to the stable V0 UI --------------------------
+    st.info("以下為 Stable V0（本機 XGBoost）介面。")
+    main_v0()
 
 
 if __name__ == "__main__":

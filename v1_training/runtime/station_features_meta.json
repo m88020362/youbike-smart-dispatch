@@ -1,0 +1,16 @@
+{
+  "source_object": "s3://ubike-data-final/平日_含最近距離_含天氣.csv",
+  "built_from_local_cache": "C:\\Users\\user\\Desktop\\hackathon\\v1_training\\_enriched_raw\\weekday_enriched.csv",
+  "station_count": 1583,
+  "static_columns": [
+    "total_docks",
+    "lon",
+    "lat",
+    "nearest_junior_high_distance",
+    "nearest_university_distance",
+    "nearest_mrt_distance",
+    "nearest_bus_distance"
+  ],
+  "aggregation": "per-station mode (most frequent value)",
+  "note": "static features only; dynamic features (bikes, docks, hour, weekday, rainfall, is_peak) come from the live snapshot"
+}
